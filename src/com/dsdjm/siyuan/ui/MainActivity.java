@@ -1,7 +1,8 @@
-package com.dsdjm.siyuan;
+package com.dsdjm.siyuan.ui;
 
 import android.app.Activity;
 import android.os.Bundle;
+import com.dsdjm.siyuan.R;
 
 public class MainActivity extends Activity {
 
