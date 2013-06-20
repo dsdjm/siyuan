@@ -91,11 +91,11 @@ public class ImageDetailActivity extends FragmentActivity implements OnClickList
                     new View.OnSystemUiVisibilityChangeListener() {
                         @Override
                         public void onSystemUiVisibilityChange(int vis) {
-                            if ((vis & View.SYSTEM_UI_FLAG_LOW_PROFILE) != 0) {
+//                            if ((vis & View.SYSTEM_UI_FLAG_LOW_PROFILE) != 0) {
                                 actionBar.hide();
-                            } else {
-                                actionBar.show();
-                            }
+//                            } else {
+//                                actionBar.show();
+//                            }
                         }
                     });
         }
