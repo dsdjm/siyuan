@@ -27,8 +27,7 @@ import android.graphics.drawable.TransitionDrawable;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.ImageView;
-
-import com.example.android.bitmapfun.BuildConfig;
+import com.dsdjm.siyuan.BuildConfig;
 
 import java.lang.ref.WeakReference;
 

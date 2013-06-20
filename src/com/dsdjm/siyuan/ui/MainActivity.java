@@ -18,6 +18,7 @@ import com.dsdjm.siyuan.R;
 import com.dsdjm.siyuan.model.Group;
 import com.dsdjm.siyuan.util.HttpUtil;
 import com.dsdjm.siyuan.util.JSonUtil;
+import com.example.android.bitmapfun.ui.ImageDetailActivity;
 
 public class MainActivity extends Activity implements AdapterView.OnItemClickListener {
     protected LayoutInflater mInflater;
@@ -29,15 +30,13 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
         @Override
         protected Object doInBackground(Object... params) {
             try {
-//                String st = "[{\"title\":\"testTitle\",\"url\":\"testUrl\",\"items\":[{\"url\":\"1.jpg\"}]}]";
-//                Group[] gs = JSonUtil.parseArray(st, Group.class);
-
                 String result = HttpUtil.get(MainConfig.URL_GET_DETAILS);
 
                 int start = result.indexOf(MainConst.TAG_START);
                 int end = result.indexOf(MainConst.TAG_END);
                 result = result.substring(start + 4, end);
                 Group[] groups = JSonUtil.parseArray(result, Group.class);
+                MainStatic.groupList.clear();
                 if (groups != null && groups.length > 0) {
                     for (Group g : groups) {
                         MainStatic.groupList.add(g);
@@ -49,7 +48,6 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
             }
             return null;
         }
-
 
         @Override
         protected void onPostExecute(Object o) {
@@ -112,7 +110,9 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
 
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         MainStatic.index = position;
-        startActivity(new Intent(this, PhotoActivity.class));
+        final Intent i = new Intent(this, ImageDetailActivity.class);
+        i.putExtra(ImageDetailActivity.EXTRA_IMAGE, (int) 0);
+        startActivity(i);
     }
 
 }
