@@ -31,10 +31,11 @@ import android.view.View.OnClickListener;
 import android.view.WindowManager.LayoutParams;
 import android.widget.Toast;
 import com.dsdjm.siyuan.R;
+import com.dsdjm.siyuan.ui.MainActivity;
 import com.example.android.bitmapfun.provider.Images;
 import com.example.android.bitmapfun.util.*;
 
-public class  ImageDetailActivity extends FragmentActivity implements OnClickListener {
+public class ImageDetailActivity extends FragmentActivity implements OnClickListener {
     private static final String IMAGE_CACHE_DIR = "images";
     public static final String EXTRA_IMAGE = "extra_image";
 
@@ -111,7 +112,7 @@ public class  ImageDetailActivity extends FragmentActivity implements OnClickLis
         switch (item.getItemId()) {
             case android.R.id.home:
                 // Home or "up" navigation
-                final Intent intent = new Intent(this, ImageGridActivity.class);
+                final Intent intent = new Intent(this, MainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 return true;
@@ -130,8 +131,8 @@ public class  ImageDetailActivity extends FragmentActivity implements OnClickLis
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.main_menu, menu);
+//        MenuInflater inflater = getMenuInflater();
+//        inflater.inflate(R.menu.main_menu, menu);
         return true;
     }
 

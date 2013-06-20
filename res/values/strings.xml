@@ -6,7 +6,7 @@
         (http://developer.android.com/training/displaying-bitmaps/display-bitmap.html). It is not
         designed to be a full reference application but to demonstrate the concepts discussed in
         training course.</string>
-    <string name="clear_cache_menu">Clear Caches</string>
+    <string name="clear_cache_menu">清理缓存</string>
     <string name="clear_cache_complete">Caches have been cleared</string>
     <string name="imageview_description">Image Thumbnail</string>
 </resources>
