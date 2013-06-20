@@ -11,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import cn.waps.AppConnect;
 import com.dsdjm.siyuan.MainConfig;
 import com.dsdjm.siyuan.MainConst;
 import com.dsdjm.siyuan.MainStatic;
@@ -97,6 +98,8 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        AppConnect.getInstance(this);
+
         mInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         setContentView(R.layout.activity_main);
 
@@ -115,4 +118,11 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
         startActivity(i);
     }
 
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        AppConnect.getInstance(this).finalize();
+        android.os.Process.killProcess(android.os.Process.myPid());
+    }
 }
