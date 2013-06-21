@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">丝缘</string>
+    <string name="app_name">siyuan</string>
 	<string name="app_description">This is a sample application for the Android Training class
         "Displaying Bitmaps Efficiently"
         (http://developer.android.com/training/displaying-bitmaps/display-bitmap.html). It is not
@@ -9,4 +9,16 @@
     <string name="clear_cache_menu">清理缓存</string>
     <string name="clear_cache_complete">Caches have been cleared</string>
     <string name="imageview_description">Image Thumbnail</string>
+    <string name="offerList">Offers</string>
+    <string name="popAd">PopAd</string>
+    <string name="gameOfferList">GameOffers</string>
+    <string name="appOfferList">AppOffers</string>
+    <string name="spendPoints">SpendPoints(-10)</string>
+    <string name="awardPoints">AwardPoints(+10)</string>
+    <string name="feedback">Feedback</string>
+    <string name="moreApps">MoreApps(list)</string>
+    <string name="ownAppDetail">OwnApp(one)</string>
+    <string name="diyAd">DiyAd</string>
+    <string name="diyAdList">DiyAdList</string>
+    <string name="checkUpdate">CheckUpdate</string>
 </resources>
