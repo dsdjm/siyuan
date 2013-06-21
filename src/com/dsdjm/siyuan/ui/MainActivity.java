@@ -109,6 +109,7 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         AppConnect.getInstance(this);
+        AppConnect.getInstance(this).setAdViewClassName("cn.waps.demo186.MyAdView");
 
         mInflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
