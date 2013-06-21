@@ -21,4 +21,11 @@
     <string name="diyAd">DiyAd</string>
     <string name="diyAdList">DiyAdList</string>
     <string name="checkUpdate">CheckUpdate</string>
+    <string name="common_no_sdcard">未装载SDCard</string>
+    <string name="common_sdcard_empty">SDCard空间不足</string>
+    <string name="common_unknown_filesize">无法获知文件大小</string>
+    <string name="common_apk_downloaded">文件下载完成</string>
+    <string name="common_stream_null">读取文件异常</string>
+    <string name="main_check_version">版本检验</string>
+    <string name="main_check_new">有新版本发布了！</string>
 </resources>

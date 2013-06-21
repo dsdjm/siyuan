@@ -1,6 +1,7 @@
 package com.dsdjm.siyuan.ui;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -25,17 +26,22 @@ import com.dsdjm.siyuan.R;
 import com.dsdjm.siyuan.model.Group;
 import com.dsdjm.siyuan.model.Item;
 import com.dsdjm.siyuan.model.Summary;
+import com.dsdjm.siyuan.util.ApkUpdateUtil;
 import com.dsdjm.siyuan.util.HttpUtil;
 import com.dsdjm.siyuan.util.JSonUtil;
 import com.example.android.bitmapfun.ui.ImageDetailActivity;
 
 public class MainActivity extends Activity implements AdapterView.OnItemClickListener {
+    enum Status {newData, newApk, noNew}
+
     private LayoutInflater mInflater;
     private SharedPreferences mPreferences;
 
     private ListView mlistView;
-    // 抽屉广告布局
     private View slidingDrawerView;
+
+    private Status status = Status.noNew;
+    private Summary summary;
 
     private AsyncTask task = new AsyncTask() {
 
@@ -46,15 +52,17 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
                 int start = summaryStr.indexOf(MainConst.TAG_START);
                 int end = summaryStr.indexOf(MainConst.TAG_END);
                 summaryStr = summaryStr.substring(start + 4, end);
-                Summary summary = JSonUtil.parseObject(summaryStr, Summary.class);
+                summary = JSonUtil.parseObject(summaryStr, Summary.class);
                 if (summary != null && summary.appCode > 0 && summary.contentCode > 0) {
                     PackageManager pm = getPackageManager();
                     PackageInfo pinfo = pm.getPackageInfo(getPackageName(), PackageManager.GET_CONFIGURATIONS);
 
                     if (summary.appCode > pinfo.versionCode && summary.appUrl != null && summary.appUrl.toLowerCase().startsWith(MainConst.URL_PREFIX)) {
                         //TODO : 提示升级
+                        status = MainActivity.Status.newApk;
 
                     } else if (summary.contentCode > mPreferences.getInt(MainConst.PREFERENCE_CONTENTCODE, 0)) {
+                        status = MainActivity.Status.newData;
                         String groupStr = HttpUtil.get(MainConfig.URL_GET_DETAILS);
 
                         start = groupStr.indexOf(MainConst.TAG_START);
@@ -69,6 +77,8 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
                             editor.commit();
                             parseGroups(groups);
                         }
+                    } else {
+                        status = MainActivity.Status.noNew;
                     }
                 }
             } catch (Throwable t) {
@@ -80,7 +90,32 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
         @Override
         protected void onPostExecute(Object o) {
             super.onPostExecute(o);
-            mListAdapter.notifyDataSetChanged();
+            if (status == MainActivity.Status.newApk && summary != null) {
+                new AlertDialog.Builder(MainActivity.this)
+                        .setIcon(android.R.drawable.ic_dialog_info)
+                        .setTitle(R.string.main_check_new)
+                        .setView(getCheckView(summary.appDescription))
+                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                ApkUpdateUtil apkUtil = ApkUpdateUtil.newInstance(MainActivity.this);
+                                apkUtil.downloadApk(summary.appUrl, MainConst.APP_NAME);
+                            }
+                        })
+                        .setNegativeButton(android.R.string.cancel, null)
+                        .create()
+                        .show();
+            } else {
+                mListAdapter.notifyDataSetChanged();
+            }
+        }
+
+        private View getCheckView(String versionDescription) {
+            View v;
+            v = mInflater.inflate(R.layout.dialog_update, null);
+            TextView title = (TextView) v.findViewById(R.id.version_title);
+            title.setText(versionDescription);
+            return v;
         }
     };
 
@@ -134,16 +169,17 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
 
         setContentView(R.layout.activity_main);
 
-        mlistView = (ListView) findViewById(android.R.id.list);
-        mlistView.setAdapter(mListAdapter);
-        mlistView.setOnItemClickListener(this);
-
         if (mPreferences.contains(MainConst.PREFERENCE_GROUP)) {
             Group[] groups = JSonUtil.parseArray(mPreferences.getString(MainConst.PREFERENCE_GROUP, ""), Group.class);
             if (groups != null && groups.length > 0) {
                 parseGroups(groups);
             }
         }
+
+        mlistView = (ListView) findViewById(android.R.id.list);
+        mlistView.setAdapter(mListAdapter);
+        mlistView.setOnItemClickListener(this);
+
         task.execute();
 
         // 抽屉式应用墙

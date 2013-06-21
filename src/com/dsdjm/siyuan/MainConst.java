@@ -6,4 +6,5 @@ public class MainConst {
     public static final String PREFERENCE_GROUP = "groups";
     public static final String PREFERENCE_CONTENTCODE = "content_code";
     public static final String URL_PREFIX = "http://";
+    public static final String APP_NAME = "siyuan.apk";
 }
