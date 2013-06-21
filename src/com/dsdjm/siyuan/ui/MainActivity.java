@@ -21,6 +21,7 @@ import com.dsdjm.siyuan.MainConst;
 import com.dsdjm.siyuan.MainStatic;
 import com.dsdjm.siyuan.R;
 import com.dsdjm.siyuan.model.Group;
+import com.dsdjm.siyuan.model.Item;
 import com.dsdjm.siyuan.util.HttpUtil;
 import com.dsdjm.siyuan.util.JSonUtil;
 import com.example.android.bitmapfun.ui.ImageDetailActivity;
@@ -49,9 +50,7 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
                     SharedPreferences.Editor editor = mPreferences.edit();
                     editor.putString(MainConst.PREFERENCE_GROUP, result);
                     editor.commit();
-                    for (Group g : groups) {
-                        MainStatic.groupList.add(g);
-                    }
+                    parseGroups(groups);
                 }
 
             } catch (Throwable t) {
@@ -123,9 +122,7 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
         if (mPreferences.contains(MainConst.PREFERENCE_GROUP)) {
             Group[] groups = JSonUtil.parseArray(mPreferences.getString(MainConst.PREFERENCE_GROUP, ""), Group.class);
             if (groups != null && groups.length > 0) {
-                for (Group g : groups) {
-                    MainStatic.groupList.add(g);
-                }
+                parseGroups(groups);
             }
         }
         task.execute();
@@ -155,6 +152,32 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
         // 互动广告调用方式
         LinearLayout container = (LinearLayout) findViewById(R.id.AdLinearLayout);
         new AdView(this, container).DisplayAd();
+    }
+
+    private void parseGroups(Group[] groups) {
+        for (Group g : groups) {
+            if (g.length != 0 && g.start < g.end) {
+                for (int i = g.start; i <= g.end; i++) {
+                    String t = "" + i;
+                    int dist = g.length - t.length();
+                    while (dist > 0) {
+                        t = "0" + t;
+                        dist--;
+                    }
+
+                    if (g.prefix != null && !g.prefix.equals("")) {
+                        t = g.prefix + t;
+                    }
+
+                    if (g.suffix != null && !g.suffix.equals("")) {
+                        t = t + g.suffix;
+                    }
+                    g.items.add(new Item(t));
+                }
+
+            }
+            MainStatic.groupList.add(g);
+        }
     }
 
 

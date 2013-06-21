@@ -7,5 +7,10 @@ import java.util.ArrayList;
 public class Group {
     public String title;
     public String url;
+    public String prefix;
+    public String suffix;
+    public int length;
+    public int start;
+    public int end;
     public ArrayList<Item> items = new ArrayList<Item>();
 }
