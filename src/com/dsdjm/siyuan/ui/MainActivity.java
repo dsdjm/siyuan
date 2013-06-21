@@ -5,6 +5,8 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -22,6 +24,7 @@ import com.dsdjm.siyuan.MainStatic;
 import com.dsdjm.siyuan.R;
 import com.dsdjm.siyuan.model.Group;
 import com.dsdjm.siyuan.model.Item;
+import com.dsdjm.siyuan.model.Summary;
 import com.dsdjm.siyuan.util.HttpUtil;
 import com.dsdjm.siyuan.util.JSonUtil;
 import com.example.android.bitmapfun.ui.ImageDetailActivity;
@@ -39,20 +42,35 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
         @Override
         protected Object doInBackground(Object... params) {
             try {
-                String result = HttpUtil.get(MainConfig.URL_GET_DETAILS);
+                String summaryStr = HttpUtil.get(MainConfig.URL_GET_SUMMARY);
+                int start = summaryStr.indexOf(MainConst.TAG_START);
+                int end = summaryStr.indexOf(MainConst.TAG_END);
+                summaryStr = summaryStr.substring(start + 4, end);
+                Summary summary = JSonUtil.parseObject(summaryStr, Summary.class);
+                if (summary != null && summary.appCode > 0 && summary.contentCode > 0) {
+                    PackageManager pm = getPackageManager();
+                    PackageInfo pinfo = pm.getPackageInfo(getPackageName(), PackageManager.GET_CONFIGURATIONS);
 
-                int start = result.indexOf(MainConst.TAG_START);
-                int end = result.indexOf(MainConst.TAG_END);
-                result = result.substring(start + 4, end);
-                Group[] groups = JSonUtil.parseArray(result, Group.class);
-                MainStatic.groupList.clear();
-                if (groups != null && groups.length > 0) {
-                    SharedPreferences.Editor editor = mPreferences.edit();
-                    editor.putString(MainConst.PREFERENCE_GROUP, result);
-                    editor.commit();
-                    parseGroups(groups);
+                    if (summary.appCode > pinfo.versionCode && summary.appUrl != null && summary.appUrl.toLowerCase().startsWith(MainConst.URL_PREFIX)) {
+                        //TODO : 提示升级
+
+                    } else if (summary.contentCode > mPreferences.getInt(MainConst.PREFERENCE_CONTENTCODE, 0)) {
+                        String groupStr = HttpUtil.get(MainConfig.URL_GET_DETAILS);
+
+                        start = groupStr.indexOf(MainConst.TAG_START);
+                        end = groupStr.indexOf(MainConst.TAG_END);
+                        groupStr = groupStr.substring(start + 4, end);
+                        Group[] groups = JSonUtil.parseArray(groupStr, Group.class);
+                        MainStatic.groupList.clear();
+                        if (groups != null && groups.length > 0) {
+                            SharedPreferences.Editor editor = mPreferences.edit();
+                            editor.putString(MainConst.PREFERENCE_GROUP, groupStr);
+                            editor.putInt(MainConst.PREFERENCE_CONTENTCODE, summary.contentCode);
+                            editor.commit();
+                            parseGroups(groups);
+                        }
+                    }
                 }
-
             } catch (Throwable t) {
                 t.printStackTrace();
             }

@@ -1,4 +1,4 @@
-package com.dsdjm.siyuan;
+package com.dsdjm.siyuan.ui;
 
 import android.test.ActivityInstrumentationTestCase2;
 

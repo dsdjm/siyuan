@@ -10,7 +10,6 @@ public class MyAdView extends OffersWebView {
 	 */
 	@Override
 	protected void onCreate(Bundle arg0) {
-		// TODO Auto-generated method stub
 		super.onCreate(arg0);
 		
 	}
