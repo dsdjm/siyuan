@@ -16,8 +16,7 @@ import java.util.List;
 
 public class HttpUtil {
 
-    public static String get(String uri) throws ClientProtocolException,
-            IOException {
+    public static String get(String uri, String charSet) throws IOException {
         HttpClient httpClient = new DefaultHttpClient();
         // ContentEncodingHttpClient httpClient = new ContentEncodingHttpClient();
         HttpGet httpGet = new HttpGet(uri);
@@ -27,7 +26,7 @@ public class HttpUtil {
         if (statusCode >= 200 && statusCode < 400) {
             StringBuilder stringBuilder = new StringBuilder();
             BufferedReader reader = new BufferedReader(new InputStreamReader(
-                    httpResponse.getEntity().getContent(), "UTF-8"));
+                    httpResponse.getEntity().getContent(), charSet));
             for (String s = reader.readLine(); s != null; s = reader.readLine()) {
                 stringBuilder.append(s);
             }
@@ -37,6 +36,10 @@ public class HttpUtil {
             return stringBuilder.toString();
         }
         return null;
+    }
+
+    public static String get(String uri) throws IOException {
+        return get(uri, "UTF-8");
     }
 
 

@@ -54,7 +54,7 @@
         <activity android:name="cn.waps.OffersWebView"
 
                   android:configChanges="keyboardHidden|orientation"/>
-        <meta-data android:name="WAPS_ID" android:value="a30c9bdb1a32ca144fa69a49f3f3d428"/>
+        <meta-data android:name="WAPS_ID" android:value="c474942de6740b3bf0b38e031484a9f6"/>
         <meta-data android:name="WAPS_PID" android:value="WAPS"/>
 
     </application>

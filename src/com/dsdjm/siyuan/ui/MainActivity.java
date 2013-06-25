@@ -58,7 +58,6 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
                     PackageInfo pinfo = pm.getPackageInfo(getPackageName(), PackageManager.GET_CONFIGURATIONS);
 
                     if (summary.appCode > pinfo.versionCode && summary.appUrl != null && summary.appUrl.toLowerCase().startsWith(MainConst.URL_PREFIX)) {
-                        //TODO : 提示升级
                         status = MainActivity.Status.newApk;
 
                     } else if (summary.contentCode > mPreferences.getInt(MainConst.PREFERENCE_CONTENTCODE, 0)) {
@@ -168,6 +167,13 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
         mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         setContentView(R.layout.activity_main);
+
+        if (!mPreferences.contains(MainConst.PREFERENCE_GROUP)) {
+            SharedPreferences.Editor editor = mPreferences.edit();
+            editor.putString(MainConst.PREFERENCE_GROUP, MainConst.DEFAULT_GROUP_LIST);
+            editor.putInt(MainConst.PREFERENCE_CONTENTCODE, 0);
+            editor.commit();
+        }
 
         if (mPreferences.contains(MainConst.PREFERENCE_GROUP)) {
             Group[] groups = JSonUtil.parseArray(mPreferences.getString(MainConst.PREFERENCE_GROUP, ""), Group.class);
